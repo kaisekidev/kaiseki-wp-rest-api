@@ -7,7 +7,7 @@
     "module"
   ],
   "license": "proprietary",
-  "homepage": "https://github.com/kaisekidev/wp-rest-api",
+  "homepage": "https://github.com/kaisekidev/kaiseki-wp-rest-api",
   "authors": [
     {
       "name": "Kaiseki",
@@ -29,8 +29,8 @@
     }
   ],
   "support": {
-    "issues": "https://github.com/kaisekidev/wp-rest-api/issues",
-    "source": "https://github.com/kaisekidev/wp-rest-api"
+    "issues": "https://github.com/kaisekidev/kaiseki-wp-rest-api/issues",
+    "source": "https://github.com/kaisekidev/kaiseki-wp-rest-api"
   },
   "autoload": {
     "psr-4": {
