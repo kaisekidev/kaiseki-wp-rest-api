@@ -3,7 +3,11 @@
         "null", "true", "false",
         "static", "self", "parent",
         "array", "string", "int", "float", "bool", "iterable", "callable", "void", "object",
-        "add_action", "register_rest_route"
+        "add_action",
+        "register_rest_route",
+        "WP_REST_Request",
+        "WP_REST_Response",
+        "WP_REST_Server"
     ],
     "php-core-extensions" : [
         "Core",
