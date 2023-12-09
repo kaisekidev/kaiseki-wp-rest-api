@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Kaiseki\WordPress\RestApi;
 
 use Kaiseki\Config\Config;
-use Kaiseki\Config\NestedArrayConfig;
 use Psr\Container\ContainerInterface;
 use WP_REST_Server;
 
@@ -22,17 +21,14 @@ final class RestRouteRegistryFactory
 {
     public function __invoke(ContainerInterface $container, RestRouteBuilder $builder): RestRouteRegistry
     {
-
-        $config = new NestedArrayConfig((array)$container->get('config'), '.');
-//        $config = $configReader->get('rest_api');
-//        $config = Config::get($container);
+        $config = Config::build((array)$container->get('config'), '.');
 
         /** @var list<class-string<RestRouteInterface>> $routeClassStrings */
         $routeClassStrings = $config->array('rest_api.routes');
         /** @var list<RestRouteInterface> $routeClassStrings */
         $routes = Config::initClassMap($container, $routeClassStrings);
 
-        /** @var array<string, RestRouteConfig|list<RestRouteConfig>> $routeConfigs */
+        /** @var array<string, list<RestRouteConfig>|RestRouteConfig> $routeConfigs */
         $routeConfigs = $config->array('rest_api.route_configs');
         foreach ($routeConfigs as $route => $routeConfig) {
             /** @var list<RestRouteConfig> $configList */

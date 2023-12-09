@@ -47,11 +47,4 @@ interface RestRouteInterface
      * @return ?string
      */
     public function getNamespace(): ?string;
-
-    /**
-     * Get the REST API endpoint route.
-     *
-     * @return RestRouteInterface
-     */
-    public function withNamespace(string $namespace): RestRouteInterface;
 }

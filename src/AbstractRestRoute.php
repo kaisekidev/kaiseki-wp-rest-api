@@ -4,35 +4,12 @@ declare(strict_types=1);
 
 namespace Kaiseki\WordPress\RestApi;
 
-class RestRoute implements RestRouteInterface
-{
-    /**
-     * @param string                               $route
-     * @param list<string>|string                  $methods
-     * @param RestRouteCallbackInterface           $callback
-     * @param RestRoutePermissionCallbackInterface $permissionCallback
-     * @param array<string, mixed>                 $arguments
-     * @param ?string                              $namespace
-     */
-    public function __construct(
-        private readonly string $route,
-        private readonly string|array $methods,
-        private readonly RestRouteCallbackInterface $callback,
-        private readonly RestRoutePermissionCallbackInterface $permissionCallback,
-        private readonly array $arguments = [],
-        private ?string $namespace = null,
-    ) {
-    }
+use WP_REST_Server;
 
-    /**
-     * Get the REST API endpoint route.
-     *
-     * @return string
-     */
-    public function getRoute(): string
-    {
-        return $this->route;
-    }
+abstract class AbstractRestRoute
+{
+    protected RestRouteCallbackInterface $callback;
+    protected RestRoutePermissionCallbackInterface $permissionCallback;
 
     /**
      * Get the callback used by the REST API endpoint.
@@ -51,7 +28,7 @@ class RestRoute implements RestRouteInterface
      */
     public function getMethods(): string|array
     {
-        return $this->methods;
+        return WP_REST_Server::READABLE;
     }
 
     /**
@@ -71,7 +48,7 @@ class RestRoute implements RestRouteInterface
      */
     public function getArguments(): array
     {
-        return $this->arguments;
+        return [];
     }
 
     /**
@@ -81,6 +58,6 @@ class RestRoute implements RestRouteInterface
      */
     public function getNamespace(): ?string
     {
-        return $this->namespace;
+        return null;
     }
 }
