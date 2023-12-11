@@ -8,19 +8,6 @@ use WP_REST_Server;
 
 abstract class AbstractRestRoute
 {
-    protected RestRouteCallbackInterface $callback;
-    protected RestRoutePermissionCallbackInterface $permissionCallback;
-
-    /**
-     * Get the callback used by the REST API endpoint.
-     *
-     * @return RestRouteCallbackInterface
-     */
-    public function getCallback(): RestRouteCallbackInterface
-    {
-        return $this->callback;
-    }
-
     /**
      * Get the HTTP methods that the REST API endpoint responds to.
      *
@@ -29,16 +16,6 @@ abstract class AbstractRestRoute
     public function getMethods(): string|array
     {
         return WP_REST_Server::READABLE;
-    }
-
-    /**
-     * Get the callback used to validate a request to the REST API endpoint.
-     *
-     * @return RestRoutePermissionCallbackInterface
-     */
-    public function getPermissionCallback(): RestRoutePermissionCallbackInterface
-    {
-        return $this->permissionCallback;
     }
 
     /**
