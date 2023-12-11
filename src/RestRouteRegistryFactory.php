@@ -22,21 +22,18 @@ use function function_exists;
  */
 final class RestRouteRegistryFactory
 {
-    public function __construct(private readonly RestRouteBuilder $restRouteBuilder)
-    {
-    }
-
     public function __invoke(ContainerInterface $container): RestRouteRegistry
     {
         $config = Config::get($container);
+        $builder = $container->get(RestRouteBuilder::class);
 
         /** @var list<class-string<RestRouteInterface>> $routeClassStrings */
-        $routeClassStrings = $config->array('rest_api/routes');
+        $routeClassStrings = $config->array('rest_api/routes', []);
         /** @var list<RestRouteInterface> $routeClassStrings */
         $routes = Config::initClassMap($container, $routeClassStrings);
 
         /** @var array<string, list<RestRouteConfig>|RestRouteConfig> $routeConfigs */
-        $routeConfigs = $config->array('rest_api/route_configs');
+        $routeConfigs = $config->array('rest_api/route_configs', []);
         foreach ($routeConfigs as $route => $routeConfig) {
             /** @var list<RestRouteConfig> $configList */
             $configList = isset($routeConfig['callback']) ? [$routeConfig] : $routeConfig;
@@ -44,7 +41,7 @@ final class RestRouteRegistryFactory
                 /** @var RestRouteCallbackInterface $callback */
                 $callback = $container->get($configEntry['callback']);
 
-                $routes[] = $this->restRouteBuilder->fromConfig($route, [
+                $routes[] = $builder->fromConfig($route, [
                     'methods' => $configEntry['methods'] ?? WP_REST_Server::READABLE,
                     'callback' => $callback,
                     'permission_callback' => $this->getPermissionCallback(
@@ -58,7 +55,7 @@ final class RestRouteRegistryFactory
         }
 
         return new RestRouteRegistry(
-            $config->string('api/rest_namespace'),
+            $config->string('rest_api/namespace'),
             $routes
         );
     }
