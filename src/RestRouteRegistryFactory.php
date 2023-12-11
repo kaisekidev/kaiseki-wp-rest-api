@@ -22,7 +22,11 @@ use function function_exists;
  */
 final class RestRouteRegistryFactory
 {
-    public function __invoke(ContainerInterface $container, RestRouteBuilder $builder): RestRouteRegistry
+    public function __construct(private readonly RestRouteBuilder $restRouteBuilder)
+    {
+    }
+
+    public function __invoke(ContainerInterface $container): RestRouteRegistry
     {
         $config = Config::get($container);
 
@@ -40,7 +44,7 @@ final class RestRouteRegistryFactory
                 /** @var RestRouteCallbackInterface $callback */
                 $callback = $container->get($configEntry['callback']);
 
-                $routes[] = $builder->fromConfig($route, [
+                $routes[] = $this->restRouteBuilder->fromConfig($route, [
                     'methods' => $configEntry['methods'] ?? WP_REST_Server::READABLE,
                     'callback' => $callback,
                     'permission_callback' => $this->getPermissionCallback(
