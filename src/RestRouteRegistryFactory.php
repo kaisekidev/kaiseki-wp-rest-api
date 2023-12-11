@@ -9,12 +9,13 @@ use Psr\Container\ContainerInterface;
 use WP_REST_Server;
 
 use function class_exists;
+use function function_exists;
 
 /**
  * @phpstan-type RestRouteConfig array{
  *     methods?: string|list<string>,
  *     callback: class-string<RestRouteCallbackInterface>,
- *     permission_callback: string|class-string<RestRoutePermissionCallbackInterface>,
+ *     permission_callback: class-string<RestRoutePermissionCallbackInterface>|callable-string,
  *     args?: array<string, mixed>,
  *     namespace?: string,
  *  }
@@ -58,19 +59,26 @@ final class RestRouteRegistryFactory
         );
     }
 
+    /**
+     * @param ContainerInterface $container
+     * @param string             $permissionCallback
+     *
+     * @return callable-string|RestRoutePermissionCallbackInterface
+     */
     private function getPermissionCallback(
         ContainerInterface $container,
         string $permissionCallback
     ): RestRoutePermissionCallbackInterface|string {
         if (!class_exists($permissionCallback)) {
-            return $permissionCallback;
+            return $this->getFunction($permissionCallback);
         }
 
+        /** @var RestRoutePermissionCallbackInterface $callback */
         $callback = $container->get($permissionCallback);
 
         if (!$callback instanceof RestRoutePermissionCallbackInterface) {
             throw new \InvalidArgumentException(
-                sprintf(
+                \Safe\sprintf(
                     'Permission callback %s must implement %s',
                     $permissionCallback,
                     RestRoutePermissionCallbackInterface::class
@@ -79,5 +87,24 @@ final class RestRouteRegistryFactory
         }
 
         return $callback;
+    }
+
+    /**
+     * @param string $function
+     *
+     * @return callable-string
+     */
+    private function getFunction(string $function): string
+    {
+        if (!function_exists($function)) {
+            throw new \InvalidArgumentException(
+                \Safe\sprintf(
+                    'Function %s does not exist',
+                    $function
+                )
+            );
+        }
+
+        return $function;
     }
 }

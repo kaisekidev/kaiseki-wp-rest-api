@@ -10,7 +10,7 @@ use WP_REST_Server;
  * @phpstan-type RestRouteConfig array{
  *    methods?: string|list<string>|null,
  *    callback: RestRouteCallbackInterface,
- *    permission_callback: RestRoutePermissionCallbackInterface,
+ *    permission_callback: callable-string|RestRoutePermissionCallbackInterface,
  *    args?: array<string, mixed>|null,
  *    namespace?: string|null,
  * }

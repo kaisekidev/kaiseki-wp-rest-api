@@ -7,18 +7,18 @@ namespace Kaiseki\WordPress\RestApi;
 class RestRoute implements RestRouteInterface
 {
     /**
-     * @param string                               $route
-     * @param list<string>|string                  $methods
-     * @param RestRouteCallbackInterface           $callback
-     * @param RestRoutePermissionCallbackInterface $permissionCallback
-     * @param array<string, mixed>                 $arguments
-     * @param ?string                              $namespace
+     * @param string                                               $route
+     * @param list<string>|string                                  $methods
+     * @param RestRouteCallbackInterface                           $callback
+     * @param callable-string|RestRoutePermissionCallbackInterface $permissionCallback
+     * @param array<string, mixed>                                 $arguments
+     * @param ?string                                              $namespace
      */
     public function __construct(
         private readonly string $route,
         private readonly string|array $methods,
         private readonly RestRouteCallbackInterface $callback,
-        private readonly RestRoutePermissionCallbackInterface $permissionCallback,
+        private readonly RestRoutePermissionCallbackInterface|string $permissionCallback,
         private readonly array $arguments = [],
         private ?string $namespace = null,
     ) {
@@ -57,9 +57,9 @@ class RestRoute implements RestRouteInterface
     /**
      * Get the callback used to validate a request to the REST API endpoint.
      *
-     * @return RestRoutePermissionCallbackInterface
+     * @return (callable(\WP_REST_Request): bool)|RestRoutePermissionCallbackInterface
      */
-    public function getPermissionCallback(): RestRoutePermissionCallbackInterface
+    public function getPermissionCallback(): RestRoutePermissionCallbackInterface|callable
     {
         return $this->permissionCallback;
     }

@@ -30,9 +30,9 @@ interface RestRouteInterface
     /**
      * Get the callback used to validate a request to the REST API endpoint.
      *
-     * @return RestRoutePermissionCallbackInterface
+     * @return (callable(\WP_REST_Request): bool)|RestRoutePermissionCallbackInterface
      */
-    public function getPermissionCallback(): RestRoutePermissionCallbackInterface;
+    public function getPermissionCallback(): RestRoutePermissionCallbackInterface|callable;
 
     /**
      * Get the expected arguments for the REST API endpoint.
