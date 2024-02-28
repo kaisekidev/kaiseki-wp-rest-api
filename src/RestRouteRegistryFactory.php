@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kaiseki\WordPress\RestApi;
 
+use InvalidArgumentException;
 use Kaiseki\Config\Config;
 use Psr\Container\ContainerInterface;
 use WP_REST_Server;
@@ -24,16 +25,15 @@ final class RestRouteRegistryFactory
 {
     public function __invoke(ContainerInterface $container): RestRouteRegistry
     {
-        $config = Config::get($container);
+        $config = Config::fromContainer($container);
         $builder = $container->get(RestRouteBuilder::class);
 
-        /** @var list<class-string<RestRouteInterface>> $routeClassStrings */
-        $routeClassStrings = $config->array('rest_api/routes', []);
         /** @var list<RestRouteInterface> $routeClassStrings */
+        $routeClassStrings = $config->array('rest_api.routes');
         $routes = Config::initClassMap($container, $routeClassStrings);
 
         /** @var array<string, list<RestRouteConfig>|RestRouteConfig> $routeConfigs */
-        $routeConfigs = $config->array('rest_api/route_configs', []);
+        $routeConfigs = $config->array('rest_api.route_configs');
         foreach ($routeConfigs as $route => $routeConfig) {
             /** @var list<RestRouteConfig> $configList */
             $configList = isset($routeConfig['callback']) ? [$routeConfig] : $routeConfig;
@@ -55,7 +55,7 @@ final class RestRouteRegistryFactory
         }
 
         return new RestRouteRegistry(
-            $config->string('rest_api/namespace'),
+            $config->string('rest_api.namespace'),
             $routes
         );
     }
@@ -78,7 +78,7 @@ final class RestRouteRegistryFactory
         $callback = $container->get($permissionCallback);
 
         if (!$callback instanceof RestRoutePermissionCallbackInterface) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 \Safe\sprintf(
                     'Permission callback %s must implement %s',
                     $permissionCallback,
@@ -98,7 +98,7 @@ final class RestRouteRegistryFactory
     private function getFunction(string $function): string
     {
         if (!function_exists($function)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 \Safe\sprintf(
                     'Function %s does not exist',
                     $function

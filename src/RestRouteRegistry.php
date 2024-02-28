@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Kaiseki\WordPress\RestApi;
 
-use Kaiseki\WordPress\Hook\HookCallbackProviderInterface;
+use Kaiseki\WordPress\Hook\HookProviderInterface;
 
-final class RestRouteRegistry implements HookCallbackProviderInterface
+use function add_action;
+use function register_rest_route;
+
+final class RestRouteRegistry implements HookProviderInterface
 {
     /**
      * @param string                   $namespace
@@ -18,7 +21,7 @@ final class RestRouteRegistry implements HookCallbackProviderInterface
     ) {
     }
 
-    public function registerHookCallbacks(): void
+    public function addHooks(): void
     {
         add_action('rest_api_init', [$this, 'registerRestEndpoint']);
     }
@@ -26,6 +29,15 @@ final class RestRouteRegistry implements HookCallbackProviderInterface
     public function registerRestEndpoint(): void
     {
         foreach ($this->routes as $route) {
+            //            var_dump($route->getRoute());
+            //            var_dump($route->getNamespace() ?? $this->namespace);
+            //            var_dump([
+            //                'methods' => $route->getMethods(),
+            ////                'callback' => $route->getCallback(),
+            ////                'permission_callback' => $route->getPermissionCallback(),
+            ////                'args' => $route->getArguments(),
+            //            ]);
+            //            die;
             register_rest_route(
                 $route->getNamespace() ?? $this->namespace,
                 $route->getRoute(),

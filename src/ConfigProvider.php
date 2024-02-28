@@ -12,6 +12,11 @@ final class ConfigProvider
     public function __invoke(): array
     {
         return [
+            'rest_api' => [
+                'namespace' => '',
+                'routes' => [],
+                'route_configs' => [],
+            ],
             'hook' => [
                 'provider' => [
                     RestRouteRegistry::class,

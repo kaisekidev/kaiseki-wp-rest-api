@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Kaiseki\WordPress\RestApi;
 
+use WP_REST_Request;
+
 interface RestRouteInterface
 {
     /**
@@ -30,7 +32,7 @@ interface RestRouteInterface
     /**
      * Get the callback used to validate a request to the REST API endpoint.
      *
-     * @return (callable(\WP_REST_Request): bool)|RestRoutePermissionCallbackInterface
+     * @return (callable(WP_REST_Request): bool)|RestRoutePermissionCallbackInterface
      */
     public function getPermissionCallback(): RestRoutePermissionCallbackInterface|callable;
 

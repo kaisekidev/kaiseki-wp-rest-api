@@ -1,7 +1,7 @@
 parameters:
     level: max
+    treatPhpDocTypesAsCertain: false
+    checkGenericClassInNonGenericObjectType: false
     paths:
         - src/
         - tests/
-    treatPhpDocTypesAsCertain: false
-    checkGenericClassInNonGenericObjectType: false
