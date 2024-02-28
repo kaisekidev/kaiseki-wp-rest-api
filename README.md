@@ -7,3 +7,5 @@ composer require kaiseki/wp-rest-api
 ```
 
 ## Usage
+
+Lorem ipsum
