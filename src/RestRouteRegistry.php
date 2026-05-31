@@ -29,18 +29,14 @@ final class RestRouteRegistry implements HookProviderInterface
     public function registerRestEndpoint(): void
     {
         foreach ($this->routes as $route) {
-            //            var_dump($route->getRoute());
-            //            var_dump($route->getNamespace() ?? $this->namespace);
-            //            var_dump([
-            //                'methods' => $route->getMethods(),
-            ////                'callback' => $route->getCallback(),
-            ////                'permission_callback' => $route->getPermissionCallback(),
-            ////                'args' => $route->getArguments(),
-            //            ]);
-            //            die;
+            $namespace = $route->getNamespace() ?? $this->namespace;
+            $path = $route->getRoute();
+            if ($namespace === '' || $namespace === '0' || $path === '' || $path === '0') {
+                continue;
+            }
             register_rest_route(
-                $route->getNamespace() ?? $this->namespace,
-                $route->getRoute(),
+                $namespace,
+                $path,
                 [
                     'methods' => $route->getMethods(),
                     'callback' => $route->getCallback(),

@@ -9,6 +9,7 @@ use Kaiseki\Config\Config;
 use Psr\Container\ContainerInterface;
 use WP_REST_Server;
 
+use function array_values;
 use function class_exists;
 use function function_exists;
 
@@ -56,7 +57,7 @@ final class RestRouteRegistryFactory
 
         return new RestRouteRegistry(
             $config->string('rest_api.namespace'),
-            $routes
+            array_values($routes)
         );
     }
 
